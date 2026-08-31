@@ -14,4 +14,7 @@ class Main:
             exit()
             
         return image 
+    
+main = Main()
+print(main.Image_Input())
         
