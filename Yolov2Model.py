@@ -1,7 +1,7 @@
 import torch
 import argparse
 import Main
-from utils.utils import  select_device
+from YoloPV2ExternalStuff.utils.utils import select_device, LoadImages
 class ImageProcessing():
         
     
@@ -9,7 +9,7 @@ class ImageProcessing():
         
           
         parser = argparse.ArgumentParser()
-        parser.add_argument('--weights', nargs='+', type=str, default='data/weights/yolopv2.pt', help='model.pt path(s)')
+        parser.add_argument('--weights', nargs='+', type=str, default='prove-it-comp-vision/YoloPV2ExternalStuff/weights/yolopv2.pt', help='model.pt path(s)')
         parser.add_argument('--source', type=str, default='inference/vid2', help='source')  # file/folder, 0 for webcam
         parser.add_argument('--img-size', type=int, default=640, help='inference size (pixels)')
         parser.add_argument('--conf-thres', type=float, default=0.3, help='object confidence threshold')
@@ -25,23 +25,34 @@ class ImageProcessing():
         parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
         self.opt = parser.parse_args()
         # setting and directories
-        self.source, self.weights,  save_txt, imgsz = self.opt.source, self.opt.weights,  self.opt.save_txt, self.opt.img_size
+        self.source, self.weights, self.save_txt, self.imgsz = self.opt.source, self.opt.weights,  self.opt.save_txt, self.opt.img_size
         save_img = not self.opt.nosave and not self.source.endswith('.txt')  # save inference images
         
-            # Load model
-        stride =32
-        self.model  = torch.jit.load(self.weights)
+        # Load model
         self.device = select_device(self.opt.device)
-        half = self.device.type != 'cpu'  # half precision only supported on CUDA
+        self.stride =32
+        self.model  = torch.jit.load(self.weights, map_location=self.device)
+        self.half = self.device.type != 'cpu'  # half precision only supported on CUDA
         self.model = self.model.to(self.device)
                
 
     def load_image(self):
-        pass
+        vid_path, vid_writer = None, None
+        self.dataset = LoadImages(self.source, img_size=self.imgsz, stride=self.stride)
+        return self.dataset
 
-    def preprocess_image(self):
-        pass
-    
+    def preprocess_image(self,img):
+        img = torch.from_numpy(img).to(self.device)
+        img = img.half() if self.half else img.float()  # uint8 to fp16/32
+        img /= 255.0  # 0 - 255 to 0.0 - 1.0
+
+        if img.ndimension() == 3:
+            img = img.unsqueeze(0)
+            
+        return img
+           
+
+            
 
         
     
