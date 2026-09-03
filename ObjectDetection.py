@@ -1,6 +1,8 @@
 from YoloPV2ExternalStuff.utils.utils import scale_coords, time_synchronized, \
 split_for_trace_model, non_max_suppression \
 
+from ImageProcessing import ImageProcessing
+
 class ObjectDetection():
     
     def __init__(self,model,opt, img):
@@ -19,5 +21,3 @@ class ObjectDetection():
                                    classes=self.opt.classes, agnostic=self.opt.agnostic_nms)
         
         return pred
-    
-    
