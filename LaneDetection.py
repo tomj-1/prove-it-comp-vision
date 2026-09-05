@@ -1,4 +1,4 @@
-from YoloPV2ExternalStuff.utils.utils import driving_area_mask,lane_line_mask
+from YoloPV2ExternalStuff.utils.utils import lane_line_mask
 class LaneDetection():
     def __init__(self,model, img):
         
