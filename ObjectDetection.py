@@ -9,7 +9,7 @@ class ObjectDetection():
         
         self.model = model
         self.opt = opt
-        self.img = img   
+        self.img = ImageProcessing(img)   
     
     def detectobject(self):
         # Inference

@@ -1,6 +1,5 @@
 import torch
 import argparse
-import Main
 from YoloPV2ExternalStuff.utils.utils import select_device, LoadImages
 class ImageProcessing():
         

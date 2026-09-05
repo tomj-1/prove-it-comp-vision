@@ -1,13 +1,17 @@
 import cv2
+
 from LaneDetection import LaneDetection
+from import plot_one_box
 
 
 class Visualizer:
 
-    def __init__(self, img, model, calibration_points):
+    def __init__(self, img, model, calibration_points, detections):
         self.img = img
         self.model = model
         self.calibration_points = calibration_points
+        self.detections = detections
+
 
     def visualize(self):
 
@@ -52,6 +56,7 @@ class Visualizer:
                 img_middle
             )
 
+        # Draw left lane
         self.img = display_from_list(
             self.img,
             left_lane_points,
@@ -59,12 +64,27 @@ class Visualizer:
             (0, 255, 255)
         )
 
+        # Draw right lane
         self.img = display_from_list(
             self.img,
             right_lane_points,
             lane_mask,
             (0, 255, 255)
         )
+
+
+
+        if len(self.detections):
+
+            for *xyxy, conf, cls in reversed(self.detections):
+
+                plot_one_box(
+                    xyxy,
+                    self.img,
+                    color=[0, 0, 255],
+                    line_thickness=2
+                )
+
 
         return self.img
 
