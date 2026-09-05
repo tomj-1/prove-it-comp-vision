@@ -1,16 +1,14 @@
 import cv2
 
 from LaneDetection import LaneDetection
-from import plot_one_box
-
-
+from YoloPV2ExternalStuff.utils.utils import plot_one_box
+from ObjectDetection import ObjectDetection
 class Visualizer:
 
-    def __init__(self, img, model, calibration_points, detections):
+    def __init__(self, img, model,  opt):
         self.img = img
         self.model = model
-        self.calibration_points = calibration_points
-        self.detections = detections
+        self.opt = opt
 
 
     def visualize(self):
@@ -21,21 +19,27 @@ class Visualizer:
             self.img
         ).detectlane()
 
+        detections = ObjectDetection(self.model,self.opt,self.img).detectobject()
+        
         left_lane_points = []
         right_lane_points = []
         left_left_lane_points = []
         right_right_lane_points = []
 
-        bottom_horizon = self.calibration_points[4]
-        upper_horizon = self.calibration_points[5]
 
-        D = bottom_horizon[1] - upper_horizon[1]
+
 
         img_middle = self.img.shape[1] // 2
 
+        height = lane_mask.shape[0]
+
+        bottom_y = int(height * 0.95)
+        upper_y = int(height * 0.60)
+
+        D = bottom_y - upper_y
         for i in range(20):
 
-            horizontal_line = bottom_horizon[1] - (i * D // 20)
+            horizontal_line = bottom_y - (i * D // 20)
 
             points = find_middle_pixel_on_height(
                 lane_mask,
@@ -74,9 +78,9 @@ class Visualizer:
 
 
 
-        if len(self.detections):
+        if len(detections):
 
-            for *xyxy, conf, cls in reversed(self.detections):
+            for *xyxy, conf, cls in reversed(detections):
 
                 plot_one_box(
                     xyxy,
