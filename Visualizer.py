@@ -1,7 +1,7 @@
 import cv2
 
 from LaneDetection import LaneDetection
-from YoloPV2ExternalStuff.utils.utils import plot_one_box
+from YoloPV2ExternalStuff.utils.utils import plot_one_box, scale_coords
 from ObjectDetection import ObjectDetection
 class Visualizer:
 
@@ -80,6 +80,11 @@ class Visualizer:
 
         if len(detections):
 
+            detections[:,:4] = scale_coords(
+                (640, 640),
+                detections[:, :4],
+                self.img.shape
+            )
             for *xyxy, conf, cls in reversed(detections):
 
                 plot_one_box(
@@ -201,9 +206,20 @@ def display_from_list(
     color
 ):
 
+    img_h, img_w = img.shape[:2]
+    mask_h, mask_w = mask.shape
+    
+    x_scale = img_w / mask_w
+    y_scale = img_h / mask_h
+    
     previous_element = []
 
     for element in list_of_points:
+        
+        element = (
+            int(element[0] * x_scale),
+            int(element[1] * y_scale)
+        )
 
         if len(previous_element) != 0:
 
