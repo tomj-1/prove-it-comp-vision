@@ -18,6 +18,15 @@ class Visualizer:
             self.model,
             self.img
         ).detectlane()
+        
+        print("lane mask shape:", lane_mask.shape)
+        print("lane pixels:", (lane_mask == 1).sum())
+
+        cv2.imshow(
+            "RAW LANE MASK",
+            (lane_mask * 255).astype("uint8")
+        )
+        cv2.waitKey(0)
 
         detections = ObjectDetection(self.model,self.opt,self.img).detectobject()
         
@@ -29,7 +38,7 @@ class Visualizer:
 
 
 
-        img_middle = self.img.shape[1] // 2
+        img_middle = lane_mask.shape[1] // 2
 
         height = lane_mask.shape[0]
 
@@ -206,13 +215,14 @@ def display_from_list(
     color
 ):
 
+    previous_element = None
+    
     img_h, img_w = img.shape[:2]
     mask_h, mask_w = mask.shape
     
     x_scale = img_w / mask_w
     y_scale = img_h / mask_h
     
-    previous_element = []
 
     for element in list_of_points:
         
@@ -221,11 +231,11 @@ def display_from_list(
             int(element[1] * y_scale)
         )
 
-        if len(previous_element) != 0:
+        if previous_element is not None:
 
             if (
-                abs(previous_element[0] - element[0])
-                < mask.shape[1] // 5
+                abs(previous_element[0] - element[0] )
+                < img_w // 5
             ):
 
                 cv2.line(
