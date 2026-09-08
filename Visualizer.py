@@ -15,7 +15,8 @@ class Visualizer:
 
         lane_mask = LaneDetection(
             self.model,
-            self.img
+            self.img,
+            self.opt
         ).detectlane()
 
         detections = ObjectDetection(

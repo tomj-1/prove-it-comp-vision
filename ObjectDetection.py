@@ -1,7 +1,6 @@
-from YoloPV2ExternalStuff.utils.utils import scale_coords, time_synchronized, \
-split_for_trace_model, non_max_suppression \
-
 from ImageProcessing import ImageProcessing
+from YoloPV2ExternalStuff.utils.utils import letterbox, split_for_trace_model, non_max_suppression 
+
 import cv2
 import torch
 class ObjectDetection():
@@ -13,19 +12,20 @@ class ObjectDetection():
         self.img = img  
     
     def detectobject(self):
-        img = self.img
 
-        img = cv2.resize(img, (640, 640))
-        img = img[:, :, ::-1]
-        img = img.transpose(2, 0, 1)
-        img = img.copy()
+        processor = ImageProcessing(self.opt)
 
-        img = torch.from_numpy(img)
-        img = img.float()
-        img /= 255.0
+        img = self.img.copy()
 
-        if img.ndimension() == 3:
-            img = img.unsqueeze(0)
+        img = letterbox(
+            img,
+            (640, 640),
+            auto=False,
+            stride=32
+        )[0]
+
+        img = processor.preprocess_image(img)
+
         # Inference
         [pred,anchor_grid],_,_ = self.model(img)
 
