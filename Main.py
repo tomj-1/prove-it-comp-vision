@@ -11,7 +11,7 @@ def main():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--input", required=True)
-    parser.add_argument("--conf-thres", type=float, default=0.8)
+    parser.add_argument("--conf-thres", type=float, default=0.35)
     parser.add_argument("--iou-thres", type=float, default=0.45)
     parser.add_argument("--classes", nargs="+", type=int)
     parser.add_argument("--agnostic-nms", action="store_true")

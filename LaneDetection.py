@@ -22,13 +22,11 @@ class LaneDetection():
         
         img = processor.preprocess_image(img)
         
-        print("LANE INPUT:", type(img), img.shape)
+        
         # Inference
         _,_,ll = self.model(img)
 
         ll_seg_mask = lane_line_mask(ll)
-        print("lane mask:", ll_seg_mask.shape)
-        print("original image:", self.img.shape)
                 
 
         # Resize lane mask back to original image size

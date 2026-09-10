@@ -1,5 +1,4 @@
-import cv2
-
+import cv2 
 from LaneDetection import LaneDetection
 from YoloPV2ExternalStuff.utils.utils import plot_one_box, scale_coords
 from ObjectDetection import ObjectDetection
@@ -31,6 +30,7 @@ class Visualizer:
             (self.img.shape[1], self.img.shape[0]),
             interpolation=cv2.INTER_NEAREST
         )
+        
 
         # Color detected lane pixels yellow
         self.img[lane_mask_resized > 0] = (0, 255, 255)
@@ -44,7 +44,7 @@ class Visualizer:
                 self.img.shape
             ).round()
 
-            for *xyxy, conf, cls in reversed(detections):
+            for *xyxy, _, _ in reversed(detections):
 
                 plot_one_box(
                     xyxy,
