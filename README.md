@@ -1,6 +1,6 @@
-# Autonomous Vehicle Perception
+# Prove-it-comp-vision
 
-Autonomous Vehicle Perception is a computer vision project that uses YOLOPv2 to detect vehicles and lane lines from road images.
+Prove-it-comp-vision is a computer vision project that uses YOLOPv2 to detect vehicles and lane lines from road images.
 
 ## Features
 
