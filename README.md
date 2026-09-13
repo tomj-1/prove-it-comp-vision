@@ -32,5 +32,42 @@ Lane Detection:
 - PyTorch
 - OpenCV
 - NumPy
-- YOLOPv2
 
+## Setup
+
+Clone the repository:
+
+```bash
+git clone YOUR_REPO_URL
+cd YOUR_REPO_NAME
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Clone YOLOPv2:
+
+```bash
+git clone https://github.com/CAIC-AD/YOLOPv2.git
+```
+
+Download the YOLOPv2 model weights and place them in the weights folder.
+
+## Run Program
+
+Run the program with an image and choose either CPU or GPU.
+
+Using CPU:
+
+```bash
+python Main.py --input "path/to/image.jpg" --device cpu
+```
+
+Using GPU:
+
+```bash
+python Main.py --input "path/to/image.jpg" --device gpu
+```
